@@ -285,6 +285,15 @@ class Config(object):
         return self._get_value_verbose("batch_size")
 
     @property
+    def backend(self) -> str:
+        backend = self._cfg.get("backend", "torch")
+        if isinstance(backend, str):
+            backend = backend.lower()
+        if backend not in ["torch", "jax"]:
+            raise ValueError("'backend' must be either 'torch' or 'jax'.")
+        return backend
+
+    @property
     def bidirectional_stacked_forecast_lstm(self) -> bool:
         return self._cfg.get("bidirectional_stacked_forecast_lstm", False)
 

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from neuralhydrology.evaluation import get_tester
+from neuralhydrology.evaluation import get_tester as get_torch_tester
 from neuralhydrology.utils.config import Config
 
 
@@ -19,5 +19,9 @@ def start_evaluation(cfg: Config, run_dir: Path, epoch: int = None, period: str 
         The period to evaluate, by default 'test'.
 
     """
-    tester = get_tester(cfg=cfg, run_dir=run_dir, period=period, init_model=True)
+    if cfg.backend == "jax":
+        from neuralhydrology.jax.evaluation import get_tester
+        tester = get_tester(cfg=cfg, run_dir=run_dir, period=period, init_model=True)
+    else:
+        tester = get_torch_tester(cfg=cfg, run_dir=run_dir, period=period, init_model=True)
     tester.evaluate(epoch=epoch, save_results=True, save_all_output=cfg.save_all_output, metrics=cfg.metrics)
