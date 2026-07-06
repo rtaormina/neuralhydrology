@@ -10,6 +10,7 @@ uv.lock
 .coverage
 
 # folder
+notebooks/*
 build/*
 dist/*
 neuralhydrology.egg-info/*
